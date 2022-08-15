@@ -27,8 +27,6 @@ const Cotizacion = ({ resultado }) => {
   //Validemos que el objeto resultado no esté vacío
   if (Object.keys(resultado).length === 0) return null;
 
-  console.log(resultado);
-
   return (
     <ResultadoDiv>
       <Precio>

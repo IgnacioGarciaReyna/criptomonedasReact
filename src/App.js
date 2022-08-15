@@ -66,7 +66,7 @@ function App() {
         //Los corchetes son una forma de acceder a objetos que no sabemos como se van a llamar.
         //En este caso, cada consulta a la api trae nombres distintos, que justamente son iguales a los nombres que manejabamos en nuestra app
         guardarResultado(resultado.data.DISPLAY[criptomoneda][moneda]);
-      }, 2000);
+      }, 1000);
     };
 
     cotizarCriptomoneda();
