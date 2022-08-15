@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import imagen from "./cryptomonedas.png";
 import Formulario from "./components/Formulario";
+import Cotizacion from "./components/Cotizacion";
+import Spinner from "./components/Spinner";
 
 const Contenedor = styled.div`
   max-width: 900px;
@@ -40,6 +42,8 @@ const Heading = styled.h1`
 function App() {
   const [moneda, guardarMoneda] = useState("");
   const [criptomoneda, guardarCriptomoneda] = useState("");
+  const [resultado, guardarResultado] = useState({});
+  const [cargando, guardarCargando] = useState(false);
 
   //Las dependencias son moneda y criptomoneda, de esa forma cuando uno de esos valores cambien y le dé submit
   useEffect(() => {
@@ -52,11 +56,28 @@ function App() {
 
       const resultado = await axios.get(url);
 
-      console.log(resultado.data.DISPLAY[criptomoneda][moneda]);
+      //Mostrar el spinner
+      guardarCargando(true);
+
+      //Ocultar el spinner y mostrar el resultado
+      setTimeout(() => {
+        //Cambiar estado de cargando
+        guardarCargando(false);
+        //Los corchetes son una forma de acceder a objetos que no sabemos como se van a llamar.
+        //En este caso, cada consulta a la api trae nombres distintos, que justamente son iguales a los nombres que manejabamos en nuestra app
+        guardarResultado(resultado.data.DISPLAY[criptomoneda][moneda]);
+      }, 2000);
     };
 
     cotizarCriptomoneda();
   }, [moneda, criptomoneda]);
+
+  //Mostrar Spinner o Resultado
+  const componente = cargando ? (
+    <Spinner />
+  ) : (
+    <Cotizacion resultado={resultado} />
+  );
 
   return (
     <Contenedor>
@@ -69,6 +90,8 @@ function App() {
           guardarMoneda={guardarMoneda}
           guardarCriptomoneda={guardarCriptomoneda}
         />
+
+        {componente}
       </div>
     </Contenedor>
   );
